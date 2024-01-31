@@ -21,7 +21,7 @@
   },
   "lint-staged": {
     "*": "prettier --ignore-unknown --write",
-    "*.{js,ts}": "pnpm lint"
+    "*.{js,ts}": "pnpm lint --"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
