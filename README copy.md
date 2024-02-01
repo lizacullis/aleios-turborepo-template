@@ -1,6 +1,6 @@
 # Aleios Turborepo Template
 
-This is an official aleios Turborepo template! It has all the cool features turborepo as to offer, but also has all our favorite tools and plugins we know and love!
+This is an official aleios Turborepo template! It has all the cool features turborepo has to offer, but also has all our favourite tools and plugins we know and love!
 
 ## Using this example
 
