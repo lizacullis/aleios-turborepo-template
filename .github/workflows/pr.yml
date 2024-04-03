@@ -1,0 +1,60 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  merge_group:
+    types: [checks_requested]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+name: ⛷ PR tests
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_REGION: eu-west-2
+  STAGE: 'dev'
+  PR_NUMBER: ${{ github.event.number }}
+
+jobs:
+  build-format-lint-test:
+    name: 🚀 Build, lint, test + deploy dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Install & cache node dependencies
+        uses: ./.github/actions/install-node-deps
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test Unit
+        run: pnpm test-unit
+
+# Add the below if you have to deploy your stack to do integration tests
+
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v3
+      #   with:
+      #     role-to-assume: ${{ secrets.AWS_ROLE_ARN_STAGING }}
+      #     role-session-name: GitHub_to_AWS_via_FederatedOIDC
+      #     aws-region: ${{ env.AWS_REGION }}
+
+      # - name: Deploy
+      #   working-directory: apps/backend/
+      #   run: pnpm run deploy --require-approval never
+
+      # - name: Test Integration
+      #   run: pnpm test-integration

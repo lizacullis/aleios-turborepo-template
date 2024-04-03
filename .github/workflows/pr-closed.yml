@@ -1,0 +1,45 @@
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  id-token: write # This is required for aws-actions/configure-aws-credentials@v1
+  contents: read # This is required for actions/checkout
+  actions: read # This is required for nrwl/nx-set-shas
+  packages: read # read onewizz packages
+
+name: ⛷ PR closed - Env cleanup
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_REGION: eu-west-2
+  PR_NUMBER: ${{ github.event.number }}
+  STAGE: 'dev'
+  AWS_ACCOUNT_ID: 469147938340
+
+jobs:
+  cleanup-environment:
+    name: 🏗 Cleanup AWS Environment
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Install & cache node dependencies
+        uses: ./.github/actions/install-node-deps
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_STAGING }}
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: '🛠️ Tear down #${{ github.event.number }} - [dev]'
+        working-directory: apps/backend/
+        run: pnpm run destroy
