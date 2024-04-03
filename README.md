@@ -2,18 +2,25 @@
 
 This is an official aleios Turborepo template! It has all the cool features turborepo as to offer, but also has all our favorite tools and plugins we know and love!
 
-# Using this template
-
-## What can you delete to use this template with little clutter?
+# What can you delete to use this template with little clutter?
 
 If you want to use this template, you can safely delete the following files/folders which were used for example purposes.
 
-- The `apps/` folder
-  - This is used to demonstrate where you should build the bulk of your application.
 - The `packages/example-package` folder
   - This is an example package to demonstrate how to set up tests etc.
 
-## Repo Overview
+# How to approach creating your app
+
+### Packages
+
+We will add packages in the `packages` folder. This is for reuseable components and features.
+
+### Application
+
+To create the main application, for example your cdk project, create an `apps` folder. Here you can create a `backend` folder for your backend application.
+You can also create a `frontend` folder for your frontend application.
+
+# Repo Overview
 
 ### What has been set up
 
